@@ -95,6 +95,7 @@ class userLogin:
         response = get(url='https://exam.mvwchina.com/pc/student/teacher/admin.html?token=%s' % (user.token))
         result = response.text
         logging.info(result)
+        logging.info(user.token)
         # # logging.info(data)
         # response = post(url='https://examup.mvwchina.com/services2', json=data)
         # result = loads(urllib.parse.unquote(response.text))
@@ -106,9 +107,9 @@ class userLogin:
         pass
 
 if __name__ == '__main__':
-    # logging.info("strat login")
-    # user = userLogin('15533356888')
-    # user.run()
+    logging.info("strat login")
+    user = userLogin('15533356888')
+    user.run()
 
     pass
 
