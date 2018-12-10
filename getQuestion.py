@@ -6,12 +6,14 @@ from json import loads, dumps
 from login import userLogin
 import urllib
 
-logging.basicConfig( level = logging.INFO)
+logging.basicConfig(level=logging.INFO)
+
 
 class GetQuestion:
     def __init__(self):
         self.url_question = 'https://examup.mvwchina.com/services2'
         self.user = userLogin('15533356888')
+        self.user.run()
         self.headers_question_10201300 = {
             ':method': 'POST',
             ':path': '/services2',
@@ -25,27 +27,18 @@ class GetQuestion:
             'content-type': 'text/plain; charset=UTF-8',
             'origin': 'https://exam.mvwchina.com'
         }
-        logging.info("bbb")
-
-        pass
 
     # 获取考试页面
-    def get_question(self):
-        # "keywordId1": null, "keywordId2": null,
-        # "keywordId3": null, "keywordId4": null, "keywordId5": null, "classifyType": null,
-        # "questionTypeCode": null,
-        # "difficulty": null, "havePictures": null, "haveAnalyse": null, "topic": null, "remarks": null,
-        # "auditingStatus": null,
+    def get_question(self, pasges, maxNum, bankId):
         # bankId 可调整 pages根据情况修改翻页 servciecNuber是服务的编码
-        data = {"serviceModule": "MVW-KAOSHINEW-T", "serviceNumber": "10201300", "token": "%s",
-                "args": {"bankId": "99c676979a8611e69446fcaa14579e1e",
-                         "pages": 1, "maxNum": 20}, "terminalType": "A"}
-        data["token"] = self.user.token
-        response = post(user.url_question, json=data)
+        data = {"serviceModule": "MVW-KAOSHINEW-T", "serviceNumber": "10201300",
+                "token": self.user.token, "args": {"bankId": "99c676979a8611e69446fcaa14579e1e",
+                                                   "pages": 1,
+                                                   "maxNum": 100}, "terminalType": "A"}
+        logging.info("get page")
 
-        logging.info(urllib.parse.unquote(response.text))
-        pass
-
+        response = post(url='https://examup.mvwchina.com/services2', json=data)
+        return loads(urllib.parse.unquote(response.text))["serviceResult"]
 
     # 运行获取页面
     def run(self):
