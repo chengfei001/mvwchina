@@ -49,12 +49,14 @@ class GetPic:
                         if imgs:
                             self.split_url(imgs)
                         if chirld.get('choiceAnswers'):
-                            for answer in question['choiceAnswers']:
-                                imgs = re.findall(pattern, answer['choiceanswer'])
+                            # 循环获取子题中答案,A,B,C,D
+                            for chirld_answer in chirld['choiceAnswers']:
+                                imgs = re.findall(pattern, chirld_answer['choiceanswer'])
                                 # 如果img List不为空获取图片
                                 if imgs:
                                     self.split_url(imgs)
-        time.seelp(2)
+
+        # time.seelp(2)
         questions.close()
 
 
@@ -69,18 +71,23 @@ class GetPic:
         file_name = os.path.basename(url)
         dir_name = os.path.dirname(url)
         dir_name = dir_name.replace('https://exam.mvwchina.com/', '')
+        dir_name = dir_name.replace('https://mvw-exam.oss-cn-beijing.aliyuncs.com', '')
         if dir_name[0] != '/':
             dir_name = '/'+dir_name
 
         # 判断目录是否存在，不存在就创建
         save_path = self.path_root + dir_name
-        self.mkdir( save_path)
+        self.mkdir(save_path)
 
         # 获取图片并保存
         response = get(url=url)
-        pic = open(save_path + os.sep + file_name, 'wb')
-        pic.write(response.content)
-        pic.close()
+        try:
+            pic = open(save_path + os.sep + file_name, 'wb')
+            pic.write(response.content)
+            pic.close()
+        except IsADirectoryError as err:
+            logging.error(save_path + os.sep + file_name)
+            logging.error(err)
 
         return
 
@@ -95,5 +102,5 @@ class GetPic:
 
 if __name__ == '__main__':
     getpic = GetPic()
-    # getpic.get_pic_from_webisite('https://exam.mvwchina.com//upload/2018/05/02/5125c2d113494192a3a73a24f58bcd19.png')
+    # getpic.get_pic_from_webisite('https://exam.mvwchina.com//upload/2018/05/02/5125c2d113494192a3a73a24f58bcd19.pnga')
     getpic.get_pic_from_mongo()
