@@ -21,8 +21,8 @@ class GetQuestion:
     def __init__(self):
         self.url_question = 'https://examup.mvwchina.com/services2'
         self.user = userLogin('15533356888')
-        # self.user.run()
-        self.user.token = '035e0136990d45898a2adee613bb8d43'
+        self.user.run()
+        # self.user.token = '035e0136990d45898a2adee613bb8d43'
         # 每页取max_num条数据
         self.max_num = 500
         # 题库id
@@ -100,7 +100,6 @@ class GetQuestion:
                 time.sleep(random.randint(2, 7))
                 i += 1
 
-        return
 
 
 if __name__ == '__main__':
